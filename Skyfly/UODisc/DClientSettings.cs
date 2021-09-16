@@ -37,6 +37,16 @@ namespace Server.Custom.Skyfly.UODisc
 		public ulong LogChannelId { get; set; }
 
 		/// <summary>
+		/// Discord World Chat Channel Id
+		/// </summary>
+		public ulong WorldChatChannelId { get; set; }
+
+		/// <summary>
+		/// Discord Trade Chat Channel Id
+		/// </summary>
+		public ulong TradeChatChannelId { get; set; }
+
+		/// <summary>
 		/// Forces the client to use a specific socket
 		/// <para>0 - Auto-Detect</para>
 		/// <para>1 - .Net</para>
@@ -55,13 +65,15 @@ namespace Server.Custom.Skyfly.UODisc
 		/// <para>0 - Auto-Detect</para>
 		/// <para>1 - .Net</para>
 		/// <para>2 - Mono</para></param>
-		public DClientSettings(string token, ulong guildId, ulong commandChannelId, ulong logChannelId, char commandPrefix = '!', int forceSocket = 0) : this()
+		public DClientSettings(string token, ulong guildId, ulong commandChannelId, ulong logChannelId, ulong worldchatChannelId, ulong tradechatChannelId, char commandPrefix = '!', int forceSocket = 0) : this()
 		{
 			Token = token;
 			GuildId = guildId;
 			CommandChannelId = commandChannelId;
 			CommandPrefix = commandPrefix;
 			LogChannelId = logChannelId;
+			WorldChatChannelId = worldchatChannelId;
+			TradeChatChannelId = tradechatChannelId;
 			ForceSocket = forceSocket;
 		}
 	}

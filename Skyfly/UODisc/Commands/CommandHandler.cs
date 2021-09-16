@@ -99,17 +99,27 @@ namespace Server.Custom.Skyfly.UODisc.Commands
 
 				AccessLevel access = DClient.UserManager.GetAccessLevel(e.Author.Id);
 
-				//Return when command channel is set, we are outside of it and have accesslevel vip or lower
 				//Return when we cannot find the command itself
 				//Return when the command is disabled
-				if ((e.Guild != null && access <= AccessLevel.VIP && DClient.Settings.CommandChannelId != 0 && DClient.Settings.CommandChannelId != e.Channel.Id) ||
-					!_commands.TryGetValue(command.ToLower(), out ICommand cmd))
+				if (!_commands.TryGetValue(command.ToLower(), out ICommand cmd))
 					return;
 				else if (cmd.IsDisabled)
 				{
 					e.Channel.SendMessageAsync("Command is currently disabled");
 					return;
 				}
+
+				if (DClient.Settings.WorldChatChannelId != e.Channel.Id && command.ToLower().Equals("c"))
+				{
+					e.Channel.SendMessageAsync("You can only use this command in <#" + DClient.Settings.WorldChatChannelId + "> chat!");
+					return; 
+				}
+				else if (DClient.Settings.TradeChatChannelId != e.Channel.Id && command.ToLower().Equals("t"))
+				{
+					e.Channel.SendMessageAsync("You can only use this command in <#" + DClient.Settings.TradeChatChannelId + "> chat!");
+					return;
+				}
+				else if (DClient.Settings.CommandChannelId != 0 && DClient.Settings.CommandChannelId != e.Channel.Id && (!command.ToLower().Equals("t") && !command.ToLower().Equals("c"))) return;
 
 				switch (cmd.CommandType)
 				{

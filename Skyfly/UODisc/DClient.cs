@@ -38,6 +38,10 @@ namespace Server.Custom.Skyfly.UODisc
 
 		public static void Initialize()
 		{
+			EventSink.Shutdown += OnServerShutdown;
+			EventSink.Crashed += OnServerCrashed;
+			EventSink.ServerStarted += OnServerStarted;
+
 			var entry = Config.Find("Discord.Token");
 
 			if (entry == null)
@@ -47,9 +51,12 @@ namespace Server.Custom.Skyfly.UODisc
 				Utility.PopColor();
 
 				Config.Set("Discord.Token", "Your Discord Bot Token");
-				Config.Set("Discord.GuildId", 0ul);
+				Config.Set("Discord.GuildID", 0ul);
 				Config.Set("Discord.CommandPrefix", "!");
-				Config.Set("Discord.CommandChannelId", 0ul);
+				Config.Set("Discord.LogChannelID", 0ul);
+				Config.Set("Discord.WorldChatChannelID", 0ul);
+				Config.Set("Discord.TradeChatChannelID", 0ul);
+				Config.Set("Discord.CommandChannelID", 0ul);
 				Config.Set("Discord.ForceSocket", 0);
 
 				Config.Save();
@@ -74,7 +81,7 @@ namespace Server.Custom.Skyfly.UODisc
 				return;
 			}
 
-			ulong guildId = Config.Get("Discord.GuildId", 0ul);
+			ulong guildId = Config.Get("Discord.GuildID", 0ul);
 
 			if (guildId == 0)
 			{
@@ -98,7 +105,7 @@ namespace Server.Custom.Skyfly.UODisc
 				return;
 			}
 
-			ulong commandChannelId = Config.Get("Discord.CommandChannelId", 0ul);
+			ulong commandChannelId = Config.Get("Discord.CommandChannelID", 0ul);
 
 			if (commandChannelId == 0)
 			{
@@ -110,7 +117,7 @@ namespace Server.Custom.Skyfly.UODisc
 				return;
 			}
 
-			ulong logChannelId = Config.Get("Discord.LogChannelId", 0ul);
+			ulong logChannelId = Config.Get("Discord.LogChannelID", 0ul);
 
 			if (logChannelId == 0)
 			{
@@ -119,9 +126,27 @@ namespace Server.Custom.Skyfly.UODisc
 				Utility.PopColor();
 			}
 
+			ulong worldchatChannelId = Config.Get("Discord.WorldChatChannelID", 0ul);
+
+			if (worldchatChannelId == 0)
+			{
+				Utility.PushColor(ConsoleColor.Yellow);
+				Console.WriteLine("Discord: Warning no world chat channel id found, players will not be able to talk to world chat!");
+				Utility.PopColor();
+			}
+
+			ulong tradechatChannelId = Config.Get("Discord.TradeChatChannelID", 0ul);
+
+			if (tradechatChannelId == 0)
+			{
+				Utility.PushColor(ConsoleColor.Yellow);
+				Console.WriteLine("Discord: Warning no trade chat channel id found, players will not be able to talk to trade chat!");
+				Utility.PopColor();
+			}
+
 			int forceSocket = Config.Get("Discord.ForceSocket", 0);
 
-			Settings = new DClientSettings(token, guildId, commandChannelId, logChannelId, cmdPrefix, forceSocket);
+			Settings = new DClientSettings(token, guildId, commandChannelId, logChannelId, worldchatChannelId, tradechatChannelId, cmdPrefix, forceSocket);
 			_userMgr = new DiscordUserManager();
 			_cmdHandler = new CommandHandler(cmdPrefix);
 
@@ -151,6 +176,21 @@ namespace Server.Custom.Skyfly.UODisc
 			Load();
 
 			_dclient.ConnectAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+		}
+
+		private static void OnServerShutdown(ShutdownEventArgs e)
+		{
+			LoggerFactory.GetLogger(426597833567895572).Log($"Status: Offline", LogLevel.Info, false);
+		}
+
+		private static void OnServerCrashed(CrashedEventArgs e)
+		{
+			LoggerFactory.GetLogger(426597833567895572).Log($"Status: Offline (Back Soon!)", LogLevel.Info, false);
+		}
+
+		private static void OnServerStarted()
+		{
+			LoggerFactory.GetLogger(426597833567895572).Log($"Status: Online", LogLevel.Info, false);
 		}
 
 		public static void DiscordLog(string message, LogLevel level = LogLevel.Trace, bool usePrefix = true)
