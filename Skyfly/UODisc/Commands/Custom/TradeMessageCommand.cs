@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Server.Custom.Skyfly.UODisc.Commands.Custom
+﻿namespace Server.Custom.Skyfly.UODisc.Commands.Custom
 {
 	[Command]
 	public class TradeMessageCommand : ICommand
@@ -25,8 +19,25 @@ namespace Server.Custom.Skyfly.UODisc.Commands.Custom
 
 		public void Invoke(CommandHandler handler, CommandEventArgs args)
 		{
-			string msg = $"[Trade]{args.User.Username}: " + args.Parameters[0];
-			World.Broadcast(0x42, false, msg);
+			// Knives Chat Method
+			string msg = args.Parameters[0];
+			SendTradeChatMessage(args.User.Username, msg);
+
+			// Normal Chat Method
+			//string msg = $"[Trade]{args.User.Username}: " + args.Parameters[0];
+			//SendTradeChatMessage(0x49, false, msg);
+		}
+
+		public static void SendTradeChatMessage(int hue, bool ascii, string text)
+		{
+			World.Broadcast(hue, ascii, AccessLevel.Player, text);
+		}
+		public static void SendTradeChatMessage(string name, string msg)
+		{
+			Mobile WMMobile = new Mobile(0x9000000);
+			WMMobile.Name = name;
+			WMMobile.RawName = name;
+			Knives.Chat3.Channel.GetByName("Trade").OnChat(WMMobile, msg);
 		}
 	}
 }

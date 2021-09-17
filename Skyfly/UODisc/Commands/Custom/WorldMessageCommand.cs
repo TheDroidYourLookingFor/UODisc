@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Server.Custom.Skyfly.UODisc.Commands.Custom
+﻿namespace Server.Custom.Skyfly.UODisc.Commands.Custom
 {
 	[Command]
 	public class WorldMessageCommand : ICommand
@@ -25,10 +19,25 @@ namespace Server.Custom.Skyfly.UODisc.Commands.Custom
 
 		public void Invoke(CommandHandler handler, CommandEventArgs args)
 		{
-			string msg = $"[World]{args.User.Username}: " + args.Parameters[0];
+			// Knives Chat Method
+			string msg = args.Parameters[0];
+			SendWorldChatMessage(args.User.Username, msg);
 
-			World.Broadcast(0x49, false, msg);
-			//args.Channel.SendEmbedMessage("Sent message").ConfigureAwait(false);
+			// Normal Chat Method
+			//string msg = $"{args.User.Username}: " + args.Parameters[0];
+			//SendWorldChatMessage(0x49, false, msg);
+		}
+
+		public static void SendWorldChatMessage(int hue, bool ascii, string text)
+		{
+			World.Broadcast(hue, ascii, AccessLevel.Player, text);
+		}
+		public static void SendWorldChatMessage(string name, string msg)
+		{
+			Mobile WMMobile = new Mobile(0x9000000);
+			WMMobile.Name = name;
+			WMMobile.RawName = name;
+			Knives.Chat3.Channel.GetByName("World").OnChat(WMMobile, msg);
 		}
 	}
 }
