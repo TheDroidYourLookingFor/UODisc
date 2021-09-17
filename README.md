@@ -14,6 +14,6 @@ Changes from Main Branch:
 - Added Knives Chat Support
 - - Will spoof a player mobile and send the message via the channel
 - Added World Chat Channel
-- - Users can Reply via !c in the Discord channel.
+ - Users can Reply via !c in the Discord channel.
 - Added Trade Chat Channel
-- - User can reply via !t in the Discord channel
+ - User can reply via !t in the Discord channel
