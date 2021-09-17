@@ -12,8 +12,8 @@ Please refer to the wiki on how to install and use the bot: https://github.com/B
 
 Changes from Main Branch:
 - Added Knives Chat Support
-- - Will spoof a player mobile and send the message via the channel
+  - Will spoof a player mobile and send the message via the channel
 - Added World Chat Channel
- - Users can Reply via !c in the Discord channel.
+  - Users can Reply via !c in the Discord channel.
 - Added Trade Chat Channel
- - User can reply via !t in the Discord channel
+  - User can reply via !t in the Discord channel
