@@ -8,3 +8,12 @@ A discord client based on [DSharpPlus](https://github.com/DSharpPlus/DSharpPlus)
 This bot is developed with the intention of making it easy to implement a discord bot with features while leaving as much as possible open to the user
 
 Please refer to the wiki on how to install and use the bot: https://github.com/Blade12629/UODisc/wiki
+
+
+Changes from Main Branch:
+- Added Knives Chat Support
+  - Will spoof a player mobile and send the message via the channel
+- Added World Chat Channel
+  - Users can Reply via !c in the Discord channel.
+- Added Trade Chat Channel
+  - User can reply via !t in the Discord channel
