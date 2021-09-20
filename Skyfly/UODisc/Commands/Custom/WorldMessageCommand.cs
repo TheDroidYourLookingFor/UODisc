@@ -20,7 +20,7 @@
 		public void Invoke(CommandHandler handler, CommandEventArgs args)
 		{
 			// Knives Chat Method
-			string msg = args.Parameters[0];
+			string msg = args.ParameterString.Substring(0);
 			SendWorldChatMessage(args.User.Username, msg);
 
 			// Normal Chat Method
